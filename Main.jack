@@ -1,0 +1,7 @@
+class Main {
+    function void Main() {
+        var int length;
+        let length = Keyboard.readInt("Insert a number: ");
+        return;
+    }
+}
