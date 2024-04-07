@@ -1,0 +1,22 @@
+class Field {
+    function void drawField() {
+        var int x1, x2, y1, y2;
+        let x1 = 143;
+        let x2 = 493;
+        let y1 = 15;
+        let y2 = 239;
+
+        while (x1 < (x2 + 1)) {
+            do Screen.drawLine(x1, y1, x1, y2);
+            let x1 = x1 + 7;
+        }
+
+        let x1 = 143;
+        while (y1 < (y2 + 1)) {
+            do Screen.drawLine(x1, y1, x2, y1);
+            let y1 = y1 + 7;
+        }
+
+        return;
+    }
+}

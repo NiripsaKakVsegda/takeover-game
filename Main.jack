@@ -1,6 +1,13 @@
 class Main {
     function void main() {
-        do Drawer.drawMenu();
+        do Menu.drawMenu();
+        do Field.drawField();
+
+        // do Screen.drawRectangle(143, 15, 150, 22);
+        // do Screen.drawRectangle(486, 15, 493, 22);
+        // do Screen.drawRectangle(143, 232, 150, 239);
+        // do Screen.drawRectangle(486, 232, 493, 239);
+
         return;
     }
 }

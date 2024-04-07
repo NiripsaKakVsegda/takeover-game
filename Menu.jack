@@ -1,4 +1,4 @@
-class Drawer {
+class Menu {
     function void drawMenu() {
         do Screen.setColor(true);
 
@@ -6,14 +6,14 @@ class Drawer {
         do Screen.drawLine(0, 31, 127, 31); // верхняя горизонтальная
         do Screen.drawLine(0, 191, 127, 191); // нижняя горизонтальная
 
-        do Drawer.drawPlayer(1);
+        do Menu.drawPlayer(1);
 
-        do Drawer.drawCubes();
+        do Menu.drawCubes();
 
-        do Drawer.drawRules();
+        do Menu.drawRules();
 
-        do Drawer.drawCubeNumber(0, 3);
-        do Drawer.drawCubeNumber(1, 5);
+        do Menu.drawCubeNumber(0, 3);
+        do Menu.drawCubeNumber(1, 5);
 
         return;
     }
@@ -31,17 +31,17 @@ class Drawer {
         let y1 = 207;
         let y2 = y1 + 32;
 
-        do Screen.drawLine(x1, y1, x1, y2);
-        do Screen.drawLine(x2, y1, x2, y2);
-        do Screen.drawLine(x1, y1, x2, y1);
-        do Screen.drawLine(x1, y2, x2, y2);
+        do Screen.drawRectangle(x1-1, y1, x1, y2);
+        do Screen.drawRectangle(x2, y1, x2+1, y2);
+        do Screen.drawRectangle(x1, y1-1, x2, y1);
+        do Screen.drawRectangle(x1, y2, x2, y2+1);
 
         return;
     }
 
     function void drawCubes() {
-        do Drawer.drawCube(23);
-        do Drawer.drawCube(71);
+        do Menu.drawCube(23);
+        do Menu.drawCube(71);
         return;
     }
 
@@ -82,27 +82,27 @@ class Drawer {
         let increment = 352;
 		let screenBase = 16385 + (4 * increment);
 
-        do Drawer.drawUpArrow(screenBase);
+        do Menu.drawUpArrow(screenBase);
         do Output.moveCursor(4, 4);
         do Output.printString(" UP");
         
-        do Drawer.drawDownArrow(screenBase + (increment * 2));
+        do Menu.drawDownArrow(screenBase + (increment * 2));
         do Output.moveCursor(6, 4);
         do Output.printString(" DOWN");
         
-        do Drawer.drawLeftArrow(screenBase + (increment * 4));
+        do Menu.drawLeftArrow(screenBase + (increment * 4));
         do Output.moveCursor(8, 4);
         do Output.printString(" LEFT");
         
-        do Drawer.drawRightArrow(screenBase + (increment * 6));
+        do Menu.drawRightArrow(screenBase + (increment * 6));
         do Output.moveCursor(10, 4);
         do Output.printString(" RIGHT");
         
-        do Drawer.drawSelect(screenBase + (increment * 9));
+        do Menu.drawSelect(screenBase + (increment * 9));
         do Output.moveCursor(13, 4);
         do Output.printString(" SELECT");
 
-        do Drawer.drawSkip(screenBase + (increment * 11));
+        do Menu.drawSkip(screenBase + (increment * 11));
         do Output.moveCursor(15, 4);
         do Output.printString(" SKIP TURN");
 
