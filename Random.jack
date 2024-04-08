@@ -1,0 +1,31 @@
+class Random {
+	field int cur;
+
+	constructor Random new(int seed) {
+		let cur = seed;
+		return this;
+	} 
+
+	method int next(int mod) {
+		var int term;
+
+		let term = cur;
+		let term = (term * 75) + 74;
+		let term = modulo(term, 7369);
+		let cur = term;
+
+		let term = modulo(term, mod);
+		
+		return term;
+	}
+
+	method int modulo(int number, int mod) {
+		while((number > mod) | (number = mod)){
+			let number = number - mod;
+		}
+		while(number < 0){
+			let number = number + mod;
+		}
+		return number;
+	}
+}
