@@ -38,4 +38,13 @@ class Player {
 
         return;
     }
+
+    function int getKeyPressed() {
+		var char key;
+		let key = 0;
+		while(key = 0){
+			let key = Keyboard.keyPressed();
+		}
+		return key;
+	}
 }
