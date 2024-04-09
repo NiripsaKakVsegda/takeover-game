@@ -1,0 +1,65 @@
+class FieldPainter {
+    function void drawEmptyField() {
+        var int row, column, x1, y1, x2, y2;
+        let row = 0;
+        let column = 0;
+
+        do Screen.setColor(true);
+        let x1 = Consts.leftUpCornerX();
+        let y1 = Consts.leftUpCornerY();
+        let x2 = Consts.columns() * Consts.cellSize() + x1;
+        let y2 = Consts.rows() * Consts.cellSize() + y1;
+
+        while (row - 1 < Consts.rows()) {
+            do Screen.drawLine(x1, y1, x2, y1);
+            let y1 = y1 + Consts.cellSize();
+
+            let row = row + 1;
+        }
+
+        let y1 = Consts.leftUpCornerY();
+
+        while (column - 1 < Consts.columns()) {
+            do Screen.drawLine(x1, y1, x1, y2);
+            let x1 = x1 + Consts.cellSize();
+
+            let column = column + 1;
+        }
+
+        return;
+    }
+
+    function void drawCross(int row, int column) {
+        var int x, y;
+        let x = column * Consts.cellSize() + Consts.leftUpCornerX();
+        let y = row * Consts.cellSize() + Consts.leftUpCornerY();
+
+        do Screen.setColor(true);
+        do Screen.drawLine(x, y, x + Consts.cellSize(), y + Consts.cellSize());
+        do Screen.drawLine(x + Consts.cellSize(), y, x, y + Consts.cellSize());
+
+        return;
+    }
+
+    function void drawRect(int row, int column) {
+        var int x, y;
+        let x = column * Consts.cellSize() + Consts.leftUpCornerX();
+        let y = row * Consts.cellSize() + Consts.leftUpCornerY();
+
+        do Screen.setColor(true);
+        do Screen.drawRectangle(x + 2, y + 2, x + Consts.cellSize() - 2, y + Consts.cellSize() - 2);
+
+        return;
+    }
+
+    function void drawEmpty(int row, int column) {
+        var int x, y;
+        let x = column * Consts.cellSize() + Consts.leftUpCornerX();
+        let y = row * Consts.cellSize() + Consts.leftUpCornerY();
+
+        do Screen.setColor(false);
+        do Screen.drawRectangle(x + 1, y + 1, x + Consts.cellSize() - 1, y + Consts.cellSize() - 1);
+
+        return;
+    }
+}

@@ -1,16 +1,13 @@
 class Game {
-    field Player player1;
-    field Player player2;
-    field GameField gameField;
-    field int currentPlayerNum;
+    field Player player1, player2, currentPlayer;
+    field Array gameField;
     field int enter, skip, up, down, left, right;
+    field int moveCount;
+    field Random rnd;
 
-    constructor Game new(Player p1, Player p2, GameField gf) {
-        var int i, j, temp;
-        let player1 = p1;
-        let player2 = p2;
-        let currentPlayerNum = 0;
-        let gameField = gf;
+    constructor Game new(int seed) {
+        var int i;
+        var Cell cursor1, cursor2;
 
         let enter = 128;
         let skip = 83;
@@ -19,13 +16,71 @@ class Game {
         let right = 132;
         let down = 133;
 
-        //do Screen.drawRectangle(143, 15, 150, 22);
-        do gameField.drawField();
+        let moveCount = 0;
+        let rnd = Random.new(seed);
+
+        let player1 = Player.new(false);
+        let player2 = Player.new(true);
+        let currentPlayer = player1;
+
+        let gameField = Array.new(Consts.rows());
+
+        let i = 0;
+        while (i < Consts.rows()) {
+            let gameField[i] = Array.new(Consts.columns());
+
+            let i = i + 1;
+        }
+
+        do FieldPainter.drawEmptyField();
+
+        let cursor1 = player1.getCursor();
+        let cursor2 = player2.getCursor();
+        do FieldPainter.drawCross(cursor1.getRow(), cursor1.getColumn());
+        do FieldPainter.drawRect(cursor2.getRow(), cursor2.getColumn());
 
         return this;
     }
 
-    method Cell selectFirstCell(Player currentPlayer) {
+    method void start() {
+
+        while (~isGameFinished()) {
+            do doMove();
+        }
+
+        return;
+    }
+
+    method boolean isGameFinished() {
+        return isPlayerWin(player1) | isPlayerWin(player2);
+    }
+
+    method boolean isPlayerWin(Player p) {
+        var int totalScore;
+        let totalScore = Consts.rows() * Consts.columns();
+        return p.getScore() > (totalScore / 2);
+    }
+
+    method void doMove() {
+        var Cell selected1, selected2;
+        var int dice1, dice2;
+
+        let dice1 = rnd.next(6) + 1;
+        let dice2 = rnd.next(6) + 1;
+
+        do drawDices(dice1, dice2);
+
+        return;
+    }
+
+    method void drawDices(int dice1, int dice2) {
+        do Menu.drawCubeNumber(0, dice1);
+        do Menu.drawCubeNumber(1, dice2);
+
+        return;
+    }
+
+    method Cell selectFirstCell() {
         var int key;
         var Cell cell;
 
@@ -88,13 +143,5 @@ class Game {
 		// 	    do Sys.wait(200);
         //     }
         // }
-    }
-
-    method void loop() {
-        var Cell c1, c2;
-
-        let c1 = selectFirstCell(player1);
-
-        return;
     }
 }

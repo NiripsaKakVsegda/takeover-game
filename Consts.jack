@@ -1,0 +1,21 @@
+class Consts {
+    function int rows() {
+        return 30;
+    }
+
+    function int columns() {
+        return 50;
+    }
+    
+    function int leftUpCornerX() {
+        return 143;
+    }
+
+    function int leftUpCornerY() {
+        return 15;
+    }
+
+    function int cellSize() {
+        return 7;
+    }
+}

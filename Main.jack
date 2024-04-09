@@ -1,17 +1,13 @@
 class Main {
     function void main() {
-        var Player player1, player2;
-        var GameField gameField;
         var Game game;
+        var int seed;
+
+        let seed = Main.getFirstKeyPressed();
         
         do Menu.drawMenu();
-
-        let player1 = Player.new(0);
-        let player2 = Player.new(1);
-        let gameField = GameField.new(30, 50);
-
-        let game = Game.new(player1, player2, gameField);
-        do game.loop();
+        let game = Game.new(seed);
+        do game.start();
 
         // do Screen.drawRectangle(486, 15, 493, 22);
         // do Screen.drawRectangle(143, 232, 150, 239);
@@ -19,4 +15,13 @@ class Main {
 
         return;
     }
+
+    function int getFirstKeyPressed() {
+		var char key;
+		let key = 0;
+		while(key = 0){
+			let key = Keyboard.keyPressed();
+		}
+		return key;
+	}
 }
