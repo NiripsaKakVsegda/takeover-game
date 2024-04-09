@@ -1,0 +1,100 @@
+class Game {
+    field Player player1;
+    field Player player2;
+    field GameField gameField;
+    field int currentPlayerNum;
+    field int enter, skip, up, down, left, right;
+
+    constructor Game new(Player p1, Player p2, GameField gf) {
+        var int i, j, temp;
+        let player1 = p1;
+        let player2 = p2;
+        let currentPlayerNum = 0;
+        let gameField = gf;
+
+        let enter = 128;
+        let skip = 83;
+        let left = 130;
+        let up = 131;
+        let right = 132;
+        let down = 133;
+
+        //do Screen.drawRectangle(143, 15, 150, 22);
+        do gameField.drawField();
+
+        return this;
+    }
+
+    method Cell selectFirstCell(Player currentPlayer) {
+        var int key;
+        var Cell cell;
+
+        while (true) {
+            let key = Keyboard.keyPressed();
+
+            if (key = enter) {
+                return currentPlayer.getCursor();
+            }
+
+            if (key = left) {
+                do currentPlayer.move(0, -1);
+			}
+			if (key = up) {
+                do currentPlayer.move(-1, 0);
+			}
+			if (key = right) {
+                do currentPlayer.move(0, 1);
+			}
+			if (key = down) {
+                do currentPlayer.move(1, 0);
+			}
+
+        }
+
+        return cell;
+
+        // while ((~(key = enter)) & (~(key = skip))) {
+        //     while ((~(key = enter)) & (~(key = skip)) & ((key < left) | (key > down))) {
+		// 		let key = Keyboard.keyPressed();
+		// 	}
+
+		// 	if (key = 130) {
+		// 		let direction = 8;
+		// 	}
+		// 	if (key = 131) {
+		// 		let direction = 1;
+		// 	}
+		// 	if (key = 132) {
+		// 		let direction = 4;
+		// 	}
+		// 	if (key = 133) {
+		// 		let direction = 2;
+		// 	}
+
+        //     if ((~(key = 128)) & (~(key = 83))) {
+        //         let x = player1.getX();
+        //         let y = player1.getY();
+        //         do Screen.setColor(false);
+        //         do Screen.drawRectangle(x + 1, y + 1, x + 6, y + 6);
+
+        //         do player1.go(direction);
+
+        //         let x = player1.getX();
+        //         let y = player1.getY();
+        //         do Screen.setColor(true);
+        //         do Screen.drawRectangle(x, y, x + 7, y + 7);
+
+        //         let key = 0;
+		// 	    do Sys.wait(200);
+        //     }
+        // }
+    }
+
+    method void loop() {
+        var Cell c1, c2;
+
+        let c1 = selectFirstCell(player1);
+
+        return;
+    }
+}

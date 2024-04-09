@@ -1,0 +1,37 @@
+class Player {
+    field Cell cursor;
+    field int playerNum;
+    field int score;
+
+    constructor Player new(int num) {
+        let playerNum = num;
+        let score = 0;
+        if (num = 0) {
+            let cursor = Cell.new(0, 0);
+        } else {
+            let cursor = Cell.new(29, 49);
+        }
+        
+        return this;
+    }
+
+    method void addScore(int s) {
+        let score = score + s;
+        return;
+    }
+
+    method Cell getCursor() {
+        return cursor;
+    }
+
+    method int getNum() {
+        return playerNum;
+    }
+
+    method void move(int deltaRow, int deltaColumn) {
+        do cursor.setRow(cursor.getRow() + deltaRow);
+        do cursor.setColumn(cursor.getColumn() + deltaColumn);
+
+        return;
+    }
+}
