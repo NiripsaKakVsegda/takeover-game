@@ -40,9 +40,9 @@ class Player {
     }
 
     function int getKeyPressed() {
-		var char key;
+		var int key;
 		let key = 0;
-		while(key = 0){
+		while (key = 0) {
 			let key = Keyboard.keyPressed();
 		}
 		return key;

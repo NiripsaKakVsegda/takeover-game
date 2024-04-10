@@ -35,9 +35,9 @@ class Game {
         do FieldPainter.drawEmptyField();
 
         let cursor1 = player1.getCursor();
-        let cursor2 = player2.getCursor();
-        do FieldPainter.drawCross(cursor1.getRow(), cursor1.getColumn());
-        do FieldPainter.drawRect(cursor2.getRow(), cursor2.getColumn());
+        //let cursor2 = player2.getCursor();
+        do FieldPainter.drawColor(cursor1.getRow(), cursor1.getColumn(), true);
+        //do FieldPainter.drawRect(cursor2.getRow(), cursor2.getColumn());
 
         return this;
     }
@@ -61,9 +61,12 @@ class Game {
         return p.getScore() > (totalScore / 2);
     }
 
-    method void doMove() {
-        var Cell selected1, selected2;
+    method Cell doMove() {
+        var Cell curCell, cursor;
+        var Array row;
         var int dice1, dice2, keyPressed, selectedCount;
+        var int color;
+        var int key;
 
         let dice1 = rnd.next(6) + 1;
         let dice2 = rnd.next(6) + 1;
@@ -71,15 +74,19 @@ class Game {
         do drawDices(dice1, dice2);
 
         while (true) {
-            let keyPressed = Player.getKeyPressed();
+            let key = Player.getKeyPressed();
 
             if (key = enter) {
-                var Cell curCell;
                 let curCell = currentPlayer.getCursor();
-                if (isCellEmpty(curCell))
-                return currentPlayer.getCursor();
+                if (isCellEmpty(curCell)) {
+                    return curCell;
+                }
             }
 
+            let cursor = currentPlayer.getCursor();
+            let curCell = Cell.new(cursor.getRow(), cursor.getColumn());
+            let row = gameField[curCell.getRow()];
+            let color = row[curCell.getColumn()];
             if (key = left) {
                 do currentPlayer.move(0, -1);
 			}
@@ -92,9 +99,15 @@ class Game {
 			if (key = down) {
                 do currentPlayer.move(1, 0);
 			}
+
+            if ((key = left) | (key = up) | (key = right) | (key = down)) {
+                do FieldPainter.drawCursor(curCell, color, currentPlayer.getCursor());
+            }
+
+            do Sys.wait(200);
         }
 
-        return;
+        return curCell;
     }
 
     method void drawDices(int dice1, int dice2) {
@@ -105,7 +118,7 @@ class Game {
     }
 
     method boolean isCellEmpty(Cell cell) {
-        var Array column;
+        var Array row;
         let row = gameField[cell.getRow()];
         return row[cell.getColumn()] = 0;
     }

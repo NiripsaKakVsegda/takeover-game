@@ -52,13 +52,29 @@ class FieldPainter {
         return;
     }
 
-    function void drawEmpty(int row, int column) {
+    function void drawColor(int row, int column, boolean color) {
         var int x, y;
         let x = column * Consts.cellSize() + Consts.leftUpCornerX();
         let y = row * Consts.cellSize() + Consts.leftUpCornerY();
 
-        do Screen.setColor(false);
+        do Screen.setColor(color);
         do Screen.drawRectangle(x + 1, y + 1, x + Consts.cellSize() - 1, y + Consts.cellSize() - 1);
+
+        return;
+    }
+
+    function void drawCursor(Cell prevCell, int prevCellColor, Cell cursor) {
+        if (prevCellColor = 0) {
+            do FieldPainter.drawColor(prevCell.getRow(), prevCell.getColumn(), false);
+        }
+        if (prevCellColor = 1) {
+            do FieldPainter.drawCross(prevCell.getRow(), prevCell.getColumn());
+        }
+        if (prevCellColor = 2) {
+            do FieldPainter.drawRect(prevCell.getRow(), prevCell.getColumn());
+        }
+
+        do FieldPainter.drawColor(cursor.getRow(), cursor.getColumn(), true);
 
         return;
     }
