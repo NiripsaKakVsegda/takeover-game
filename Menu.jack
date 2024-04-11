@@ -6,14 +6,8 @@ class Menu {
         do Screen.drawLine(0, 31, 127, 31); // верхняя горизонтальная
         do Screen.drawLine(0, 191, 127, 191); // нижняя горизонтальная
 
-        do Menu.drawPlayer(1);
-
         do Menu.drawCubes();
-
         do Menu.drawRules();
-
-        do Menu.drawCubeNumber(0, 3);
-        do Menu.drawCubeNumber(1, 5);
 
         return;
     }

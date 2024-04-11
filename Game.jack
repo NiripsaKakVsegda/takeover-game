@@ -32,6 +32,9 @@ class Game {
 
         do FieldPainter.drawEmptyField();
 
+        do player1.drawScore();
+        do player2.drawScore();
+        
         return this;
     }
 
@@ -40,6 +43,8 @@ class Game {
         var Cell cursor;
         
         while (~isGameFinished()) {
+            do Menu.drawPlayer(currentPlayer.getPlayerNum());
+
             let dice1 = rnd.next(6) + 1;
             let dice2 = rnd.next(6) + 1;
             do drawDices(dice1, dice2);
