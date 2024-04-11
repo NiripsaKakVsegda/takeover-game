@@ -1,12 +1,12 @@
 class Player {
     field Cell cursor;
-    field boolean isSecond;
+    field int playerNum;
     field int score;
 
-    constructor Player new(boolean isSecond) {
-        let isSecond = isSecond;
+    constructor Player new(int n) {
+        let playerNum = n;
         let score = 0;
-        if (~isSecond) {
+        if (playerNum = 1) {
             let cursor = Cell.new(0, 0);
         } else {
             let cursor = Cell.new(29, 49);
@@ -28,8 +28,8 @@ class Player {
         return cursor;
     }
 
-    method int getIsSecond() {
-        return isSecond;
+    method int getPlayerNum() {
+        return playerNum;
     }
 
     method void move(int deltaRow, int deltaColumn) {
