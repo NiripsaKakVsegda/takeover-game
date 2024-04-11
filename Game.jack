@@ -7,7 +7,6 @@ class Game {
 
     constructor Game new(int seed) {
         var int i;
-        var Cell cursor1, cursor2;
 
         let enter = 128;
         let skip = 83;
@@ -19,8 +18,8 @@ class Game {
         let moveCount = 0;
         let rnd = Random.new(seed);
 
-        let player1 = Player.new(false);
-        let player2 = Player.new(true);
+        let player1 = Player.new(1);
+        let player2 = Player.new(2);
         let currentPlayer = player1;
 
         let gameField = Array.new(Consts.rows());
@@ -28,24 +27,74 @@ class Game {
         let i = 0;
         while (i < Consts.rows()) {
             let gameField[i] = Array.new(Consts.columns());
-
             let i = i + 1;
         }
 
         do FieldPainter.drawEmptyField();
 
-        let cursor1 = player1.getCursor();
-        //let cursor2 = player2.getCursor();
-        do FieldPainter.drawColor(cursor1.getRow(), cursor1.getColumn(), true);
-        //do FieldPainter.drawRect(cursor2.getRow(), cursor2.getColumn());
-
         return this;
     }
 
     method void start() {
-
+        var int dice1, dice2;
+        var Cell cursor;
+        
         while (~isGameFinished()) {
-            do doMove();
+            let dice1 = rnd.next(6) + 1;
+            let dice2 = rnd.next(6) + 1;
+            do drawDices(dice1, dice2);
+
+            let cursor = currentPlayer.getCursor();
+            do FieldPainter.drawColor(cursor.getRow(), cursor.getColumn(), true);
+
+            do makeTurn();
+
+            if (currentPlayer.getPlayerNum() = 1) {
+                let currentPlayer = player2;
+            } else {
+                let currentPlayer = player1;
+            }
+
+            do Sys.wait(200);
+        }
+
+        return;
+    }
+
+    method void createTerritory(Cell c1, Cell c2) {
+        var int i1, i2, j1, j2, j;
+        var int color;
+        var Array row;
+
+        if (c1.getRow() > c2.getRow()) {
+            let i1 = c2.getRow();
+            let i2 = c1.getRow();
+        } else {
+            let i1 = c1.getRow();
+            let i2 = c2.getRow();
+        }
+
+        if (c1.getColumn() > c2.getColumn()) {
+            let j1 = c2.getColumn();
+            let j2 = c1.getColumn();
+        } else {
+            let j1 = c1.getColumn();
+            let j2 = c2.getColumn();
+        }
+
+        do currentPlayer.addScore((i2 - i1 + 1) * (j2 - j1 + 1));
+
+        let color = currentPlayer.getPlayerNum();
+
+        while (i1 < (i2 + 1)) {
+            let row = gameField[i1];
+            let j = j1;
+            while (j < (j2 + 1)) {
+                let row[j] = color;
+                do FieldPainter.drawTerritory(i1, j, color);
+                let j = j + 1;
+            }
+            let i1 = i1 + 1;
         }
 
         return;
@@ -61,17 +110,60 @@ class Game {
         return p.getScore() > (totalScore / 2);
     }
 
-    method Cell doMove() {
+    method void handleCursorMove(int key) {
         var Cell curCell, cursor;
         var Array row;
-        var int dice1, dice2, keyPressed, selectedCount;
         var int color;
+
+        let cursor = currentPlayer.getCursor();
+        let curCell = Cell.new(cursor.getRow(), cursor.getColumn());
+
+        let row = gameField[curCell.getRow()];
+        let color = row[curCell.getColumn()];
+        if (key = left) {
+            do currentPlayer.move(0, -1);
+        }
+        if (key = up) {
+            do currentPlayer.move(-1, 0);
+        }
+        if (key = right) {
+            do currentPlayer.move(0, 1);
+        }
+        if (key = down) {
+            do currentPlayer.move(1, 0);
+        }
+
+        if ((key = left) | (key = up) | (key = right) | (key = down)) {
+            do FieldPainter.drawCursor(curCell, color, currentPlayer.getCursor());
+        }
+
+        return;
+    }
+
+    method void makeTurn() {
+        var Cell selected1, selected2, curCell;
+        var Array row;
+
+        let curCell = selectCell(true);
+        let selected1 = Cell.new(curCell.getRow(), curCell.getColumn());
+        let row = gameField[selected1.getRow()];
+        let row[selected1.getColumn()] = currentPlayer.getPlayerNum();
+
+        do Sys.wait(200);
+
+        let curCell = selectCell(false);
+        let selected2 = Cell.new(curCell.getRow(), curCell.getColumn());
+        let row = gameField[selected2.getRow()];
+        let row[selected2.getColumn()] = currentPlayer.getPlayerNum();
+
+        do createTerritory(selected1, selected2);
+
+        return; 
+    }
+
+    method Cell selectCell(boolean isFirst) {
+        var Cell curCell, cursor;
         var int key;
-
-        let dice1 = rnd.next(6) + 1;
-        let dice2 = rnd.next(6) + 1;
-
-        do drawDices(dice1, dice2);
 
         while (true) {
             let key = Player.getKeyPressed();
@@ -83,27 +175,7 @@ class Game {
                 }
             }
 
-            let cursor = currentPlayer.getCursor();
-            let curCell = Cell.new(cursor.getRow(), cursor.getColumn());
-            let row = gameField[curCell.getRow()];
-            let color = row[curCell.getColumn()];
-            if (key = left) {
-                do currentPlayer.move(0, -1);
-			}
-			if (key = up) {
-                do currentPlayer.move(-1, 0);
-			}
-			if (key = right) {
-                do currentPlayer.move(0, 1);
-			}
-			if (key = down) {
-                do currentPlayer.move(1, 0);
-			}
-
-            if ((key = left) | (key = up) | (key = right) | (key = down)) {
-                do FieldPainter.drawCursor(curCell, color, currentPlayer.getCursor());
-            }
-
+            do handleCursorMove(key);
             do Sys.wait(200);
         }
 
