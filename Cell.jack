@@ -26,4 +26,16 @@ class Cell {
         let column = c;
         return;
     }
+
+    function int findArea(Cell c1, Cell c2) {
+        var int i1, i2, j1, j2, j;
+
+        let i1 = Math.min(c1.getRow(), c2.getRow());
+        let i2 = Math.max(c1.getRow(), c2.getRow());
+
+        let j1 = Math.min(c1.getColumn(), c2.getColumn());
+        let j2 = Math.max(c1.getColumn(), c2.getColumn());
+
+        return (i2 - i1 + 1) * (j2 - j1 + 1);
+    }
 }

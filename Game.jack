@@ -4,6 +4,7 @@ class Game {
     field int enter, skip, up, down, left, right;
     field int moveCount;
     field Random rnd;
+    field Validator validator;
 
     constructor Game new(int seed) {
         var int i;
@@ -29,6 +30,8 @@ class Game {
             let gameField[i] = Array.new(Consts.columns());
             let i = i + 1;
         }
+
+        let validator = Validator.new(gameField);
 
         do FieldPainter.drawEmptyField();
 
@@ -84,7 +87,7 @@ class Game {
             let selected2 = 0;
             let moveSkipped = trySetSelectedCell(selected1, 0);
             if (moveSkipped) {
-                do FieldPainter.printMessage("skipped1");
+                do FieldPainter.printMessage("Turn skipped");
                 do deleteCursor(cursor);
                 return;
             }
@@ -94,7 +97,7 @@ class Game {
             let selected2 = Cell.new(0, 0);
             let moveSkipped = trySetSelectedCell(selected2, selected1);
             if (moveSkipped) {
-                do FieldPainter.printMessage("skipped2");
+                do FieldPainter.printMessage("Turn skipped");
                 do deleteCursor(cursor);
                 do deleteCursor(selected1);
                 return;
@@ -103,8 +106,8 @@ class Game {
             do deleteCursor(selected1);
             do deleteCursor(selected2);
 
-            if (true) {
-                do createTerritory(selected1, selected2);
+            if (validator.isTurnValid(selected1, selected2, dice1, dice2, currentPlayer)) {
+                do fillTerritory(selected1, selected2);
                 return;
             }
 
@@ -214,28 +217,16 @@ class Game {
         return;
     }
 
-    method void createTerritory(Cell c1, Cell c2) {
+    method void fillTerritory(Cell c1, Cell c2) {
         var int i1, i2, j1, j2, j;
         var int color;
         var Array row;
 
-        if (c1.getRow() > c2.getRow()) {
-            let i1 = c2.getRow();
-            let i2 = c1.getRow();
-        } else {
-            let i1 = c1.getRow();
-            let i2 = c2.getRow();
-        }
+        let i1 = Math.min(c1.getRow(), c2.getRow());
+        let i2 = Math.max(c1.getRow(), c2.getRow());
 
-        if (c1.getColumn() > c2.getColumn()) {
-            let j1 = c2.getColumn();
-            let j2 = c1.getColumn();
-        } else {
-            let j1 = c1.getColumn();
-            let j2 = c2.getColumn();
-        }
-
-        do currentPlayer.addScore((i2 - i1 + 1) * (j2 - j1 + 1));
+        let j1 = Math.min(c1.getColumn(), c2.getColumn());
+        let j2 = Math.max(c1.getColumn(), c2.getColumn());
 
         let color = currentPlayer.getPlayerNum();
 
@@ -249,6 +240,8 @@ class Game {
             }
             let i1 = i1 + 1;
         }
+
+        do currentPlayer.addScore(Cell.findArea(c1, c2));
 
         return;
     }

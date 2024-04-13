@@ -1,0 +1,46 @@
+class Validator {
+    field Array gameField;
+
+    constructor Validator new(Array argGameField) {
+        let gameField = argGameField;
+
+        return this;
+    }
+
+    method bool isTurnValid(Cell selected1, Cell selected2, int dice1, int dice2, Player currentPlayer) {
+        return isAreaEqualsDices(selected1, selected2, dice1, dice2);
+    }
+
+    method bool isAreaEqualsDices(Cell c1, Cell c2, int dice1, int dice2) {
+        var boolean result;
+        var int i1, i2, j1, j2, height, width;
+
+        let i1 = Math.min(c1.getRow(), c2.getRow());
+        let i2 = Math.max(c1.getRow(), c2.getRow());
+        let height = i2 - i1 + 1;
+
+        let j1 = Math.min(c1.getColumn(), c2.getColumn());
+        let j2 = Math.max(c1.getColumn(), c2.getColumn());
+        let width = j2 - j1 + 1;
+
+        let result = (height = dice1 & width = dice2) | (height = dice2 & width = dice1);
+
+        if (~result) {
+            do FieldPainter.printMessage("Area not equals dices");
+        } 
+
+        return result;
+    }
+
+    function bool isCoordsOutOfBounds(int row, int column) {
+        if ((row < 0) | (column < 0)) {
+            return true;
+        }
+
+        if ((row > (Consts.rows() - 1)) | (column > (Consts.columns() - 1))) {
+            return true;
+        }
+
+        return false;
+    }
+}

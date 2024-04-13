@@ -61,6 +61,10 @@ class Player {
     }
 
     method void move(int deltaRow, int deltaColumn) {
+        if (Validator.isCoordsOutOfBounds(cursor.getRow() + deltaRow, cursor.getColumn() + deltaColumn)) {
+            return;
+        }
+
         do cursor.setRow(cursor.getRow() + deltaRow);
         do cursor.setColumn(cursor.getColumn() + deltaColumn);
 
