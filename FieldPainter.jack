@@ -58,7 +58,7 @@ class FieldPainter {
         return;
     }
 
-    function void drawColor(int row, int column, boolean color) {
+    function void fillCell(int row, int column, boolean color) {
         var int x, y;
         let x = column * Consts.cellSize() + Consts.leftUpCornerX();
         let y = row * Consts.cellSize() + Consts.leftUpCornerY();
@@ -71,7 +71,7 @@ class FieldPainter {
 
     function void drawTerritory(int row, int column, int color) {
         if (color = 0) {
-            do FieldPainter.drawColor(row, column, false);
+            do FieldPainter.fillCell(row, column, false);
         }
         if (color = 1) {
             do FieldPainter.drawCross(row, column);
@@ -83,10 +83,15 @@ class FieldPainter {
         return;
     }
 
-    function void drawCursor(Cell prevCell, int prevCellColor, Cell cursor) {
-        do FieldPainter.drawTerritory(prevCell.getRow(), prevCell.getColumn(), prevCellColor);
+    function void drawCursor(Cell cursor) {
+        do FieldPainter.fillCell(cursor.getRow(), cursor.getColumn(), true);
 
-        do FieldPainter.drawColor(cursor.getRow(), cursor.getColumn(), true);
+        return;
+    }
+
+    function void printMessage(String text) {
+        do Output.moveCursor(22, 24);
+        do Output.printString(text);
 
         return;
     }

@@ -47,21 +47,169 @@ class Game {
 
             let dice1 = rnd.next(6) + 1;
             let dice2 = rnd.next(6) + 1;
+
+            do Sys.wait(200);
+
             do drawDices(dice1, dice2);
-
-            let cursor = currentPlayer.getCursor();
-            do FieldPainter.drawColor(cursor.getRow(), cursor.getColumn(), true);
-
-            do makeTurn();
-
-            if (currentPlayer.getPlayerNum() = 1) {
-                let currentPlayer = player2;
-            } else {
-                let currentPlayer = player1;
-            }
+            do makeTurn(dice1, dice2);
+            do changePlayer();
 
             do Sys.wait(200);
         }
+
+        return;
+    }
+
+    method boolean isGameFinished() {
+        return isPlayerWin(player1) | isPlayerWin(player2);
+    }
+
+    method boolean isPlayerWin(Player p) {
+        var int totalScore;
+        let totalScore = Consts.rows() * Consts.columns();
+        return p.getScore() > (totalScore / 2);
+    }
+
+    method void makeTurn(int dice1, int dice2) {
+        var Cell selected1, selected2, cursor;
+        var Array row;
+        var bool moveSkipped, moveDone;
+
+        let cursor = currentPlayer.getCursor();
+
+        while (~(moveDone)) {
+            do FieldPainter.drawCursor(cursor);
+
+            let selected1 = Cell.new(0, 0);
+            let selected2 = 0;
+            let moveSkipped = trySetSelectedCell(selected1, 0);
+            if (moveSkipped) {
+                do FieldPainter.printMessage("skipped1");
+                do deleteCursor(cursor);
+                return;
+            }
+
+            do Sys.wait(200);
+
+            let selected2 = Cell.new(0, 0);
+            let moveSkipped = trySetSelectedCell(selected2, selected1);
+            if (moveSkipped) {
+                do FieldPainter.printMessage("skipped2");
+                do deleteCursor(cursor);
+                do deleteCursor(selected1);
+                return;
+            }
+
+            do deleteCursor(selected1);
+            do deleteCursor(selected2);
+
+            if (true) {
+                do createTerritory(selected1, selected2);
+                return;
+            }
+
+            do Sys.wait(1000);
+        }
+
+        return; 
+    }
+
+    method boolean trySetSelectedCell(Cell outResult, Cell alreadySelected) {
+        var int key;
+        var Cell cursor;
+
+        while (true) {
+            let key = Player.getKeyPressed();
+            
+            if (key = skip) {
+                return true;
+            }
+
+            if (key = enter) {
+                let cursor = currentPlayer.getCursor();
+                if (isCellEmpty(cursor)) {
+                    do outResult.setRow(cursor.getRow());
+                    do outResult.setColumn(cursor.getColumn());
+                    return false;
+                }
+            }
+
+            do handleArrowsKeys(key, alreadySelected);
+
+            do Sys.wait(200);
+        }
+
+        return false;
+    }
+
+    method void handleArrowsKeys(int key, Cell alreadySelected) {
+        if (key = left) {
+            do moveCursor(0, -1, alreadySelected);
+        }
+        if (key = up) {
+            do moveCursor(-1, 0, alreadySelected);
+        }
+        if (key = right) {
+            do moveCursor(0, 1, alreadySelected);
+        }
+        if (key = down) {
+            do moveCursor(1, 0, alreadySelected);
+        }
+
+        return;
+    }
+
+    method void moveCursor(int deltaRow, int deltaColumn, Cell alreadySelected) {
+        var Cell cursor;
+
+        let cursor = currentPlayer.getCursor();
+        
+        do deleteCursor(cursor);
+        do currentPlayer.move(deltaRow, deltaColumn);
+        do FieldPainter.drawCursor(cursor);
+
+        if (~(alreadySelected = 0)) {
+            do FieldPainter.drawCursor(alreadySelected);
+        }
+
+        return;
+    }
+
+    method void drawDices(int dice1, int dice2) {
+        do Menu.drawCubeNumber(0, dice1);
+        do Menu.drawCubeNumber(1, dice2);
+
+        return;
+    }
+
+    method boolean isCellEmpty(Cell cell) {
+        var Array row;
+        let row = gameField[cell.getRow()];
+        return row[cell.getColumn()] = 0;
+    }
+
+    method void changePlayer() {
+        if (currentPlayer.getPlayerNum() = 1) {
+            let currentPlayer = player2;
+        } else {
+            let currentPlayer = player1;
+        }
+
+        return;
+    }
+
+    method void deleteCursor(Cell cursor) {
+        var Array row;
+        var int territoryColor;
+
+        if (cursor = 0) {
+            return;
+        }
+
+        let row = gameField[cursor.getRow()];
+        let territoryColor = row[cursor.getColumn()];
+
+        do FieldPainter.drawTerritory(cursor.getRow(), cursor.getColumn(), territoryColor);
 
         return;
     }
@@ -103,100 +251,5 @@ class Game {
         }
 
         return;
-    }
-
-    method boolean isGameFinished() {
-        return isPlayerWin(player1) | isPlayerWin(player2);
-    }
-
-    method boolean isPlayerWin(Player p) {
-        var int totalScore;
-        let totalScore = Consts.rows() * Consts.columns();
-        return p.getScore() > (totalScore / 2);
-    }
-
-    method void handleCursorMove(int key) {
-        var Cell curCell, cursor;
-        var Array row;
-        var int color;
-
-        let cursor = currentPlayer.getCursor();
-        let curCell = Cell.new(cursor.getRow(), cursor.getColumn());
-
-        let row = gameField[curCell.getRow()];
-        let color = row[curCell.getColumn()];
-        if (key = left) {
-            do currentPlayer.move(0, -1);
-        }
-        if (key = up) {
-            do currentPlayer.move(-1, 0);
-        }
-        if (key = right) {
-            do currentPlayer.move(0, 1);
-        }
-        if (key = down) {
-            do currentPlayer.move(1, 0);
-        }
-
-        if ((key = left) | (key = up) | (key = right) | (key = down)) {
-            do FieldPainter.drawCursor(curCell, color, currentPlayer.getCursor());
-        }
-
-        return;
-    }
-
-    method void makeTurn() {
-        var Cell selected1, selected2, curCell;
-        var Array row;
-
-        let curCell = selectCell(true);
-        let selected1 = Cell.new(curCell.getRow(), curCell.getColumn());
-        let row = gameField[selected1.getRow()];
-        let row[selected1.getColumn()] = currentPlayer.getPlayerNum();
-
-        do Sys.wait(200);
-
-        let curCell = selectCell(false);
-        let selected2 = Cell.new(curCell.getRow(), curCell.getColumn());
-        let row = gameField[selected2.getRow()];
-        let row[selected2.getColumn()] = currentPlayer.getPlayerNum();
-
-        do createTerritory(selected1, selected2);
-
-        return; 
-    }
-
-    method Cell selectCell(boolean isFirst) {
-        var Cell curCell, cursor;
-        var int key;
-
-        while (true) {
-            let key = Player.getKeyPressed();
-
-            if (key = enter) {
-                let curCell = currentPlayer.getCursor();
-                if (isCellEmpty(curCell)) {
-                    return curCell;
-                }
-            }
-
-            do handleCursorMove(key);
-            do Sys.wait(200);
-        }
-
-        return curCell;
-    }
-
-    method void drawDices(int dice1, int dice2) {
-        do Menu.drawCubeNumber(0, dice1);
-        do Menu.drawCubeNumber(1, dice2);
-
-        return;
-    }
-
-    method boolean isCellEmpty(Cell cell) {
-        var Array row;
-        let row = gameField[cell.getRow()];
-        return row[cell.getColumn()] = 0;
     }
 }
