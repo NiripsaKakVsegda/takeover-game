@@ -2,12 +2,49 @@ class Main {
     function void main() {
         var Game game;
         var int seed;
+        var Player winner;
+        var int key;
 
-        let seed = Player.getKeyPressed();
-        
-        do Menu.drawMenu();
-        let game = Game.new(seed);
-        do game.start();
+        while (true) {
+            // очищаем экран полностью
+            do Screen.setColor(false);
+            do Screen.drawRectangle(0, 0, 511, 255);
+            do Screen.setColor(true);
+
+            do Output.moveCursor(11, 21);
+            do Output.printString("Press ANY KEY to start");
+
+            let seed = Player.getKeyPressed();
+
+            do Menu.drawMenu();
+            let game = Game.new(seed);
+            do game.start();
+
+            let winner = game.getWonPlayer();
+            do Screen.setColor(false);
+            do Screen.drawRectangle(0, 0, 511, 255);
+
+            do Output.moveCursor(11, 25);
+            do Output.printString("Player ");
+            do Output.printInt(winner.getPlayerNum());
+            do Output.printString(" WON!");
+            do Output.moveCursor(13, 27);
+            do Output.printString("Score:");
+            do Output.printInt(winner.getScore());
+
+            do Output.moveCursor(17, 17);
+            do Output.printString("Press R to restart or Q to quit");
+
+            while (~(key = 81) & ~(key = 82)) {
+                let key = Player.getKeyPressed();
+            }
+
+            if (key = 81) {
+                do Sys.halt();
+            }
+
+            do Sys.wait(200);
+        }
 
         return;
     }

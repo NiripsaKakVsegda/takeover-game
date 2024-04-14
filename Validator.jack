@@ -26,7 +26,7 @@ class Validator {
         let result = (height = dice1 & width = dice2) | (height = dice2 & width = dice1);
 
         if (~result) {
-            do FieldPainter.printMessage("Area not equals dices");
+            do FieldPainter.printMessage("Wrong sides", 34);
         } 
 
         return result;

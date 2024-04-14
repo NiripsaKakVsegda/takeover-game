@@ -9,7 +9,7 @@ class Player {
         if (playerNum = 1) {
             let cursor = Cell.new(0, 0);
         } else {
-            let cursor = Cell.new(29, 49);
+            let cursor = Cell.new(Consts.rows() - 1, Consts.columns() - 1);
         }
         
         return this;
@@ -20,22 +20,22 @@ class Player {
             do Output.moveCursor(22, 18);
         } else {
             if (score < 10) {
-                do Output.moveCursor(22, 57);
+                do Output.moveCursor(22, 58);
             }
             if ((score > 9) & (score < 100)) {
-                do Output.moveCursor(22, 56);
+                do Output.moveCursor(22, 57);
             }
             if ((score > 99) & (score < 1000)) {
-                do Output.moveCursor(22, 55);
+                do Output.moveCursor(22, 56);
             }
             if (score > 999) {
-                do Output.moveCursor(22, 54);
+                do Output.moveCursor(22, 55);
             }
         }
 
         do Output.printString("P");
         do Output.printInt(playerNum);
-        do Output.printString(": ");
+        do Output.printString(":");
 
         do Output.printInt(score);
         

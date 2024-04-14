@@ -63,6 +63,14 @@ class Game {
         return;
     }
 
+    method Player getWonPlayer() {
+        if (player1.getScore() > player2.getScore()) {
+            return player1;
+        } else {
+            return player2;
+        }
+    }
+
     method boolean isGameFinished() {
         return isPlayerWin(player1) | isPlayerWin(player2);
     }
@@ -86,8 +94,10 @@ class Game {
             let selected1 = Cell.new(0, 0);
             let selected2 = 0;
             let moveSkipped = trySetSelectedCell(selected1, 0);
+            do FieldPainter.clearMessage();
+
             if (moveSkipped) {
-                do FieldPainter.printMessage("Turn skipped");
+                do FieldPainter.printMessage("Turn skipped", 34);
                 do deleteCursor(cursor);
                 return;
             }
@@ -96,8 +106,10 @@ class Game {
 
             let selected2 = Cell.new(0, 0);
             let moveSkipped = trySetSelectedCell(selected2, selected1);
+            do FieldPainter.clearMessage();
+
             if (moveSkipped) {
-                do FieldPainter.printMessage("Turn skipped");
+                do FieldPainter.printMessage("Turn skipped", 34);
                 do deleteCursor(cursor);
                 do deleteCursor(selected1);
                 return;

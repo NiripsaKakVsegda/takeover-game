@@ -4,6 +4,9 @@ class FieldPainter {
         let row = 0;
         let column = 0;
 
+        do Screen.setColor(false);
+        do Screen.drawRectangle(128, 0, 511, 255);
+
         do Screen.setColor(true);
         let x1 = Consts.leftUpCornerX();
         let y1 = Consts.leftUpCornerY();
@@ -89,9 +92,19 @@ class FieldPainter {
         return;
     }
 
-    function void printMessage(String text) {
-        do Output.moveCursor(22, 24);
+    function void printMessage(String text, int column) {
+        do FieldPainter.clearMessage();
+
+        do Output.moveCursor(22, column);
         do Output.printString(text);
+
+        return;
+    }
+
+    function void clearMessage() {
+        do Screen.setColor(false);
+        do Screen.drawRectangle(214, 243, 424, 252);
+        do Screen.setColor(true);
 
         return;
     }
