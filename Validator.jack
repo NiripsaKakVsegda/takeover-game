@@ -39,7 +39,7 @@ class Validator {
 
 
         if (~joined & ~corner) {
-            do FieldPainter.printMessage("Must joined to yours or in corner", 23);
+            do FieldPainter.printMessage("Must joined or in corner", 28);
             return false;
         }
 
