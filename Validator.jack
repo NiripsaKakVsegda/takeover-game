@@ -8,25 +8,169 @@ class Validator {
     }
 
     method bool isTurnValid(Cell selected1, Cell selected2, int dice1, int dice2, Player currentPlayer) {
-        return isAreaEqualsDices(selected1, selected2, dice1, dice2);
+        return isAreaEqualsDices(selected1, selected2, dice1, dice2) & 
+                isAreaOnEmptyFields(selected1, selected2) &
+                isJoinedOrInCorner(selected1, selected2, currentPlayer);
     }
 
     method bool isAreaEqualsDices(Cell c1, Cell c2, int dice1, int dice2) {
         var boolean result;
-        var int i1, i2, j1, j2, height, width;
+        var Cell sides;
+        var int height, width;
 
-        let i1 = Math.min(c1.getRow(), c2.getRow());
-        let i2 = Math.max(c1.getRow(), c2.getRow());
-        let height = i2 - i1 + 1;
-
-        let j1 = Math.min(c1.getColumn(), c2.getColumn());
-        let j2 = Math.max(c1.getColumn(), c2.getColumn());
-        let width = j2 - j1 + 1;
+        let sides = Cell.getSquareSides(c1, c2);
+        let height = sides.getRow();
+        let width = sides.getColumn();
 
         let result = (height = dice1 & width = dice2) | (height = dice2 & width = dice1);
 
         if (~result) {
             do FieldPainter.printMessage("Wrong sides", 34);
+        } 
+
+        return result;
+    }
+
+    method bool isJoinedOrInCorner(Cell c1, Cell c2, Player currentPlayer) {
+        var boolean joined, corner;
+
+        let joined = isAreaJoinedToExisting(c1, c2, currentPlayer);
+        let corner = isAreaInCorner(c1, c2, currentPlayer);
+
+
+        if (~joined & ~corner) {
+            do FieldPainter.printMessage("Must joined to yours or in corner", 23);
+            return false;
+        }
+
+        return true;
+    }
+
+    method bool isAreaJoinedToExisting(Cell c1, Cell c2, Player currentPlayer) {
+        var int i1, i2, j1, j2, i, j, cellColor;
+        var Cell curCell;
+        var Array row;
+        var boolean result;
+        let result = false;
+
+        let i1 = Math.min(c1.getRow(), c2.getRow());
+        let i2 = Math.max(c1.getRow(), c2.getRow());
+
+        let j1 = Math.min(c1.getColumn(), c2.getColumn());
+        let j2 = Math.max(c1.getColumn(), c2.getColumn());
+
+        let i = i1;
+        while (i < (i2 + 1)) {
+            if (~Validator.isCoordsOutOfBounds(i, j1 - 1)) {
+                let curCell = Cell.new(i, j1 - 1);
+                if (isPlayerOwnsCell(currentPlayer, curCell)) {
+                    let result = true;
+                }
+            }
+
+            let i = i + 1;
+        }
+
+        let i = i1;
+        while (i < (i2 + 1)) {
+            if (~Validator.isCoordsOutOfBounds(i, j2 + 1)) {
+                let curCell = Cell.new(i, j2 + 1);
+                if (isPlayerOwnsCell(currentPlayer, curCell)) {
+                    let result = true;
+                }
+            }
+
+            let i = i + 1;
+        }
+
+        let j = j1;
+        while (j < (j2 + 1)) {
+            if (~Validator.isCoordsOutOfBounds(i1 - 1, j)) {
+                let curCell = Cell.new(i1 - 1, j);
+                if (isPlayerOwnsCell(currentPlayer, curCell)) {
+                    let result = true;
+                }
+            }
+
+            let j = j + 1;
+        }
+
+        let j = j1;
+        while (j < (j2 + 1)) {
+            if (~Validator.isCoordsOutOfBounds(i2 + 1, j)) {
+                let curCell = Cell.new(i2 + 1, j);
+                if (isPlayerOwnsCell(currentPlayer, curCell)) {
+                    let result = true;
+                }
+            }
+
+            let j = j + 1;
+        }
+
+        return result;
+    }
+
+    method bool isAreaInCorner(Cell c1, Cell c2, Player currentPlayer) {
+        var int i1, i2, j1, j2;
+
+        let i1 = Math.min(c1.getRow(), c2.getRow());
+        let i2 = Math.max(c1.getRow(), c2.getRow());
+
+        let j1 = Math.min(c1.getColumn(), c2.getColumn());
+        let j2 = Math.max(c1.getColumn(), c2.getColumn());
+
+        if (currentPlayer.getPlayerNum() = 1) {
+            return isCoordsIn00(i1, j1);
+        } else {
+            return isCoordsInMaxMax(i2, j2);
+        }
+    }
+
+    method bool isCoordsIn00(int row, int column) {
+        return (row = 0) & (column = 0);
+    }
+
+    method bool isCoordsInMaxMax(int row, int column) {
+        return (row = (Consts.rows() - 1)) & (column = (Consts.columns() - 1));
+    }
+
+    method bool isPlayerOwnsCell(Player pl, Cell c) {
+        var Array row;
+        var int cellColor;
+        
+        let row = gameField[c.getRow()];
+        let cellColor = row[c.getColumn()];
+
+        return pl.getPlayerNum() = cellColor;
+    }
+
+    method bool isAreaOnEmptyFields(Cell c1, Cell c2) {
+        var int i1, i2, j1, j2, j, cellColor;
+        var Array row;
+        var boolean result;
+        let result = true;
+
+        let i1 = Math.min(c1.getRow(), c2.getRow());
+        let i2 = Math.max(c1.getRow(), c2.getRow());
+
+        let j1 = Math.min(c1.getColumn(), c2.getColumn());
+        let j2 = Math.max(c1.getColumn(), c2.getColumn());
+
+        while (i1 < (i2 + 1)) {
+            let row = gameField[i1];
+            let j = j1;
+            while (j < (j2 + 1)) {
+                let cellColor = row[j];
+                if (~(cellColor = 0)) {
+                    let result = false;
+                }
+                let j = j + 1;
+            }
+            let i1 = i1 + 1;
+        }
+
+        if (~result) {
+            do FieldPainter.printMessage("Must be on free cells", 30);
         } 
 
         return result;
