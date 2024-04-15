@@ -1,0 +1,316 @@
+function FieldPainter.drawEmptyField 6
+push constant 0
+pop local 0
+push constant 0
+pop local 1
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push constant 128
+push constant 0
+push constant 511
+push constant 255
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+call Consts.leftUpCornerX 0
+pop local 2
+call Consts.leftUpCornerY 0
+pop local 3
+call Consts.columns 0
+call Consts.cellSize 0
+call Math.multiply 2
+push local 2
+add
+pop local 4
+call Consts.rows 0
+call Consts.cellSize 0
+call Math.multiply 2
+push local 3
+add
+pop local 5
+label WHILE_EXP0
+push local 0
+push constant 1
+sub
+call Consts.rows 0
+lt
+not
+if-goto WHILE_END0
+push local 2
+push local 3
+push local 4
+push local 3
+call Screen.drawLine 4
+pop temp 0
+push local 3
+call Consts.cellSize 0
+add
+pop local 3
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+call Consts.leftUpCornerY 0
+pop local 3
+label WHILE_EXP1
+push local 1
+push constant 1
+sub
+call Consts.columns 0
+lt
+not
+if-goto WHILE_END1
+push local 2
+push local 3
+push local 2
+push local 5
+call Screen.drawLine 4
+pop temp 0
+push local 2
+call Consts.cellSize 0
+add
+pop local 2
+push local 1
+push constant 1
+add
+pop local 1
+goto WHILE_EXP1
+label WHILE_END1
+push constant 0
+return
+function FieldPainter.drawCross 2
+push argument 1
+call Consts.cellSize 0
+call Math.multiply 2
+call Consts.leftUpCornerX 0
+add
+pop local 0
+push argument 0
+call Consts.cellSize 0
+call Math.multiply 2
+call Consts.leftUpCornerY 0
+add
+pop local 1
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push local 0
+push constant 1
+add
+push local 1
+push constant 1
+add
+push local 0
+call Consts.cellSize 0
+add
+push constant 1
+sub
+push local 1
+call Consts.cellSize 0
+add
+push constant 1
+sub
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push local 0
+push local 1
+push local 0
+call Consts.cellSize 0
+add
+push local 1
+call Consts.cellSize 0
+add
+call Screen.drawLine 4
+pop temp 0
+push local 0
+call Consts.cellSize 0
+add
+push local 1
+push local 0
+push local 1
+call Consts.cellSize 0
+add
+call Screen.drawLine 4
+pop temp 0
+push constant 0
+return
+function FieldPainter.drawRect 2
+push argument 1
+call Consts.cellSize 0
+call Math.multiply 2
+call Consts.leftUpCornerX 0
+add
+pop local 0
+push argument 0
+call Consts.cellSize 0
+call Math.multiply 2
+call Consts.leftUpCornerY 0
+add
+pop local 1
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push local 0
+push constant 1
+add
+push local 1
+push constant 1
+add
+push local 0
+call Consts.cellSize 0
+add
+push constant 1
+sub
+push local 1
+call Consts.cellSize 0
+add
+push constant 1
+sub
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push local 0
+push constant 2
+add
+push local 1
+push constant 2
+add
+push local 0
+call Consts.cellSize 0
+add
+push constant 2
+sub
+push local 1
+call Consts.cellSize 0
+add
+push constant 2
+sub
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return
+function FieldPainter.fillCell 2
+push argument 1
+call Consts.cellSize 0
+call Math.multiply 2
+call Consts.leftUpCornerX 0
+add
+pop local 0
+push argument 0
+call Consts.cellSize 0
+call Math.multiply 2
+call Consts.leftUpCornerY 0
+add
+pop local 1
+push argument 2
+call Screen.setColor 1
+pop temp 0
+push local 0
+push constant 1
+add
+push local 1
+push constant 1
+add
+push local 0
+call Consts.cellSize 0
+add
+push constant 1
+sub
+push local 1
+call Consts.cellSize 0
+add
+push constant 1
+sub
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return
+function FieldPainter.drawTerritory 0
+push argument 2
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 0
+push argument 1
+push constant 0
+call FieldPainter.fillCell 3
+pop temp 0
+label IF_FALSE0
+push argument 2
+push constant 1
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push argument 0
+push argument 1
+call FieldPainter.drawCross 2
+pop temp 0
+label IF_FALSE1
+push argument 2
+push constant 2
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push argument 0
+push argument 1
+call FieldPainter.drawRect 2
+pop temp 0
+label IF_FALSE2
+push constant 0
+return
+function FieldPainter.drawCursor 0
+push argument 0
+call Cell.getRow 1
+push argument 0
+call Cell.getColumn 1
+push constant 0
+not
+call FieldPainter.fillCell 3
+pop temp 0
+push constant 0
+return
+function FieldPainter.printMessage 0
+call FieldPainter.clearMessage 0
+pop temp 0
+push constant 22
+push argument 1
+call Output.moveCursor 2
+pop temp 0
+push argument 0
+call Output.printString 1
+pop temp 0
+push constant 0
+return
+function FieldPainter.clearMessage 0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push constant 214
+push constant 243
+push constant 424
+push constant 252
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push constant 0
+return

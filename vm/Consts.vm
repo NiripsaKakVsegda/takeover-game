@@ -1,0 +1,15 @@
+function Consts.rows 0
+push constant 30
+return
+function Consts.columns 0
+push constant 50
+return
+function Consts.leftUpCornerX 0
+push constant 143
+return
+function Consts.leftUpCornerY 0
+push constant 15
+return
+function Consts.cellSize 0
+push constant 7
+return

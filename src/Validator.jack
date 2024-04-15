@@ -8,9 +8,16 @@ class Validator {
     }
 
     method bool isTurnValid(Cell selected1, Cell selected2, int dice1, int dice2, Player currentPlayer) {
-        return isAreaEqualsDices(selected1, selected2, dice1, dice2) & 
-                isAreaOnEmptyFields(selected1, selected2) &
-                isJoinedOrInCorner(selected1, selected2, currentPlayer);
+        var boolean areaEqualsDices, areaOnEmptyFields;
+
+        let areaEqualsDices = isAreaEqualsDices(selected1, selected2, dice1, dice2);
+        let areaOnEmptyFields = isAreaOnEmptyFields(selected1, selected2);
+
+        if (currentPlayer.getScore() = 0) {
+            return areaEqualsDices & areaOnEmptyFields & isAreaInCorner(selected1, selected2, currentPlayer);
+        }
+
+        return areaEqualsDices & areaOnEmptyFields & isAreaJoinedToExisting(selected1, selected2, currentPlayer);
     }
 
     method bool isAreaEqualsDices(Cell c1, Cell c2, int dice1, int dice2) {
@@ -29,21 +36,6 @@ class Validator {
         } 
 
         return result;
-    }
-
-    method bool isJoinedOrInCorner(Cell c1, Cell c2, Player currentPlayer) {
-        var boolean joined, corner;
-
-        let joined = isAreaJoinedToExisting(c1, c2, currentPlayer);
-        let corner = isAreaInCorner(c1, c2, currentPlayer);
-
-
-        if (~joined & ~corner) {
-            do FieldPainter.printMessage("Must joined or in corner", 28);
-            return false;
-        }
-
-        return true;
     }
 
     method bool isAreaJoinedToExisting(Cell c1, Cell c2, Player currentPlayer) {
@@ -107,11 +99,15 @@ class Validator {
             let j = j + 1;
         }
 
+        if (~result) {
+            do FieldPainter.printMessage("Join your territory", 31);
+        }
         return result;
     }
 
     method bool isAreaInCorner(Cell c1, Cell c2, Player currentPlayer) {
         var int i1, i2, j1, j2;
+        var boolean result;
 
         let i1 = Math.min(c1.getRow(), c2.getRow());
         let i2 = Math.max(c1.getRow(), c2.getRow());
@@ -120,10 +116,15 @@ class Validator {
         let j2 = Math.max(c1.getColumn(), c2.getColumn());
 
         if (currentPlayer.getPlayerNum() = 1) {
-            return isCoordsIn00(i1, j1);
+            let result = isCoordsIn00(i1, j1);
         } else {
-            return isCoordsInMaxMax(i2, j2);
+            let result = isCoordsInMaxMax(i2, j2);
         }
+
+        if (~result) {
+            do FieldPainter.printMessage("Start from corner", 32);
+        }
+        return result;
     }
 
     method bool isCoordsIn00(int row, int column) {
@@ -170,7 +171,7 @@ class Validator {
         }
 
         if (~result) {
-            do FieldPainter.printMessage("Must be on free cells", 30);
+            do FieldPainter.printMessage("Cells aren't free", 32);
         } 
 
         return result;

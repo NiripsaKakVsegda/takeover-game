@@ -1,0 +1,772 @@
+function Menu.drawMenu 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push constant 127
+push constant 0
+push constant 127
+push constant 255
+call Screen.drawLine 4
+pop temp 0
+push constant 0
+push constant 31
+push constant 127
+push constant 31
+call Screen.drawLine 4
+pop temp 0
+push constant 0
+push constant 191
+push constant 127
+push constant 191
+call Screen.drawLine 4
+pop temp 0
+call Menu.drawCubes 0
+pop temp 0
+call Menu.drawRules 0
+pop temp 0
+push constant 0
+return
+function Menu.drawPlayer 0
+push constant 1
+push constant 4
+call Output.moveCursor 2
+pop temp 0
+push constant 7
+call String.new 1
+push constant 80
+call String.appendChar 2
+push constant 76
+call String.appendChar 2
+push constant 65
+call String.appendChar 2
+push constant 89
+call String.appendChar 2
+push constant 69
+call String.appendChar 2
+push constant 82
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+call Output.printString 1
+pop temp 0
+push argument 0
+call Output.printInt 1
+pop temp 0
+push constant 0
+return
+function Menu.drawCube 3
+push argument 0
+push constant 32
+add
+pop local 0
+push constant 207
+pop local 1
+push local 1
+push constant 32
+add
+pop local 2
+push argument 0
+push constant 1
+sub
+push local 1
+push argument 0
+push local 2
+call Screen.drawRectangle 4
+pop temp 0
+push local 0
+push local 1
+push local 0
+push constant 1
+add
+push local 2
+call Screen.drawRectangle 4
+pop temp 0
+push argument 0
+push local 1
+push constant 1
+sub
+push local 0
+push local 1
+call Screen.drawRectangle 4
+pop temp 0
+push argument 0
+push local 2
+push local 0
+push local 2
+push constant 1
+add
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return
+function Menu.drawCubes 0
+push constant 23
+call Menu.drawCube 1
+pop temp 0
+push constant 71
+call Menu.drawCube 1
+pop temp 0
+push constant 0
+return
+function Menu.drawCubeNumber 2
+push constant 207
+pop local 1
+push argument 0
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 23
+pop local 0
+goto IF_END0
+label IF_FALSE0
+push constant 71
+pop local 0
+label IF_END0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push local 0
+push local 1
+push local 0
+push constant 31
+add
+push local 1
+push constant 31
+add
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push argument 1
+push constant 1
+eq
+push argument 1
+push constant 3
+eq
+or
+push argument 1
+push constant 5
+eq
+or
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 0
+push constant 7
+add
+push constant 9
+add
+push local 1
+push constant 7
+add
+push constant 9
+add
+push constant 2
+call Screen.drawCircle 3
+pop temp 0
+label IF_FALSE1
+push argument 1
+push constant 1
+gt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push local 0
+push constant 7
+add
+push local 1
+push constant 7
+add
+push constant 2
+call Screen.drawCircle 3
+pop temp 0
+push local 0
+push constant 7
+add
+push constant 9
+add
+push constant 9
+add
+push local 1
+push constant 7
+add
+push constant 9
+add
+push constant 9
+add
+push constant 2
+call Screen.drawCircle 3
+pop temp 0
+push argument 1
+push constant 3
+gt
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push local 0
+push constant 7
+add
+push constant 9
+add
+push constant 9
+add
+push local 1
+push constant 7
+add
+push constant 2
+call Screen.drawCircle 3
+pop temp 0
+push local 0
+push constant 7
+add
+push local 1
+push constant 7
+add
+push constant 9
+add
+push constant 9
+add
+push constant 2
+call Screen.drawCircle 3
+pop temp 0
+label IF_FALSE3
+push argument 1
+push constant 6
+eq
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push local 0
+push constant 7
+add
+push local 1
+push constant 7
+add
+push constant 9
+add
+push constant 2
+call Screen.drawCircle 3
+pop temp 0
+push local 0
+push constant 7
+add
+push constant 9
+add
+push constant 9
+add
+push local 1
+push constant 7
+add
+push constant 9
+add
+push constant 2
+call Screen.drawCircle 3
+pop temp 0
+label IF_FALSE4
+label IF_FALSE2
+push constant 0
+return
+function Menu.drawRules 2
+push constant 352
+pop local 1
+push constant 16385
+push constant 4
+push local 1
+call Math.multiply 2
+add
+pop local 0
+push local 0
+call Menu.drawUpArrow 1
+pop temp 0
+push constant 4
+push constant 4
+call Output.moveCursor 2
+pop temp 0
+push constant 3
+call String.new 1
+push constant 32
+call String.appendChar 2
+push constant 85
+call String.appendChar 2
+push constant 80
+call String.appendChar 2
+call Output.printString 1
+pop temp 0
+push local 0
+push local 1
+push constant 2
+call Math.multiply 2
+add
+call Menu.drawDownArrow 1
+pop temp 0
+push constant 6
+push constant 4
+call Output.moveCursor 2
+pop temp 0
+push constant 5
+call String.new 1
+push constant 32
+call String.appendChar 2
+push constant 68
+call String.appendChar 2
+push constant 79
+call String.appendChar 2
+push constant 87
+call String.appendChar 2
+push constant 78
+call String.appendChar 2
+call Output.printString 1
+pop temp 0
+push local 0
+push local 1
+push constant 4
+call Math.multiply 2
+add
+call Menu.drawLeftArrow 1
+pop temp 0
+push constant 8
+push constant 4
+call Output.moveCursor 2
+pop temp 0
+push constant 5
+call String.new 1
+push constant 32
+call String.appendChar 2
+push constant 76
+call String.appendChar 2
+push constant 69
+call String.appendChar 2
+push constant 70
+call String.appendChar 2
+push constant 84
+call String.appendChar 2
+call Output.printString 1
+pop temp 0
+push local 0
+push local 1
+push constant 6
+call Math.multiply 2
+add
+call Menu.drawRightArrow 1
+pop temp 0
+push constant 10
+push constant 4
+call Output.moveCursor 2
+pop temp 0
+push constant 6
+call String.new 1
+push constant 32
+call String.appendChar 2
+push constant 82
+call String.appendChar 2
+push constant 73
+call String.appendChar 2
+push constant 71
+call String.appendChar 2
+push constant 72
+call String.appendChar 2
+push constant 84
+call String.appendChar 2
+call Output.printString 1
+pop temp 0
+push local 0
+push local 1
+push constant 9
+call Math.multiply 2
+add
+call Menu.drawSelect 1
+pop temp 0
+push constant 13
+push constant 4
+call Output.moveCursor 2
+pop temp 0
+push constant 7
+call String.new 1
+push constant 32
+call String.appendChar 2
+push constant 83
+call String.appendChar 2
+push constant 69
+call String.appendChar 2
+push constant 76
+call String.appendChar 2
+push constant 69
+call String.appendChar 2
+push constant 67
+call String.appendChar 2
+push constant 84
+call String.appendChar 2
+call Output.printString 1
+pop temp 0
+push local 0
+push local 1
+push constant 11
+call Math.multiply 2
+add
+call Menu.drawSkip 1
+pop temp 0
+push constant 15
+push constant 4
+call Output.moveCursor 2
+pop temp 0
+push constant 10
+call String.new 1
+push constant 32
+call String.appendChar 2
+push constant 83
+call String.appendChar 2
+push constant 75
+call String.appendChar 2
+push constant 73
+call String.appendChar 2
+push constant 80
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+push constant 84
+call String.appendChar 2
+push constant 85
+call String.appendChar 2
+push constant 82
+call String.appendChar 2
+push constant 78
+call String.appendChar 2
+call Output.printString 1
+pop temp 0
+push constant 0
+return
+function Menu.drawUpArrow 0
+push argument 0
+push constant 32
+add
+push constant 32
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 64
+add
+push constant 112
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 96
+add
+push constant 248
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 128
+add
+push constant 508
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 160
+add
+push constant 112
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 192
+add
+push constant 112
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 224
+add
+push constant 112
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 256
+add
+push constant 112
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 288
+add
+push constant 112
+call Memory.poke 2
+pop temp 0
+push constant 0
+return
+function Menu.drawDownArrow 0
+push argument 0
+push constant 32
+add
+push constant 112
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 64
+add
+push constant 112
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 96
+add
+push constant 112
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 128
+add
+push constant 112
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 160
+add
+push constant 112
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 192
+add
+push constant 508
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 224
+add
+push constant 248
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 256
+add
+push constant 112
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 288
+add
+push constant 32
+call Memory.poke 2
+pop temp 0
+push constant 0
+return
+function Menu.drawLeftArrow 0
+push argument 0
+push constant 32
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 64
+add
+push constant 16
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 96
+add
+push constant 24
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 128
+add
+push constant 1020
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 160
+add
+push constant 1022
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 192
+add
+push constant 1020
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 224
+add
+push constant 24
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 256
+add
+push constant 16
+call Memory.poke 2
+pop temp 0
+push constant 0
+return
+function Menu.drawRightArrow 0
+push argument 0
+push constant 32
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 64
+add
+push constant 64
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 96
+add
+push constant 192
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 128
+add
+push constant 510
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 160
+add
+push constant 1022
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 192
+add
+push constant 510
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 224
+add
+push constant 192
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 256
+add
+push constant 64
+call Memory.poke 2
+pop temp 0
+push constant 0
+return
+function Menu.drawSelect 0
+push argument 0
+push constant 32
+add
+push constant 1792
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 64
+add
+push constant 1792
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 96
+add
+push constant 1800
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 128
+add
+push constant 1804
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 160
+add
+push constant 2046
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 192
+add
+push constant 2047
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 224
+add
+push constant 2046
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 256
+add
+push constant 12
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 288
+add
+push constant 8
+call Memory.poke 2
+pop temp 0
+push constant 0
+return
+function Menu.drawSkip 0
+push argument 0
+push constant 32
+add
+push constant 248
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 64
+add
+push constant 508
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 96
+add
+push constant 396
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 128
+add
+push constant 28
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 160
+add
+push constant 120
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 192
+add
+push constant 480
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 224
+add
+push constant 396
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 256
+add
+push constant 508
+call Memory.poke 2
+pop temp 0
+push argument 0
+push constant 288
+add
+push constant 248
+call Memory.poke 2
+pop temp 0
+push constant 0
+return
